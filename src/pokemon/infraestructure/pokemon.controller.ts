@@ -7,16 +7,20 @@ import {
   Param,
   Delete,
   Query,
+  Inject,
 } from '@nestjs/common';
-import { PokemonService } from './pokemon.service';
+import { PokemonService } from '../application/pokemon.service';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { IPokemonService } from '../application/pokemon.service.interface';
 
 @Controller('pokemon')
 export class PokemonController {
-  constructor(private readonly pokemonService: PokemonService) {}
+  constructor(
+    @Inject(PokemonService) private readonly pokemonService: IPokemonService,
+  ) {}
 
   @Post()
   // @HttpCode(HttpStatus.OK)

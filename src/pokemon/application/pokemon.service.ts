@@ -1,33 +1,27 @@
 import {
   BadRequestException,
+  // Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreatePokemonDto } from './dto/create-pokemon.dto';
-import { UpdatePokemonDto } from './dto/update-pokemon.dto';
+import { CreatePokemonDto } from '../infraestructure/dto/create-pokemon.dto';
+import { UpdatePokemonDto } from '../infraestructure/dto/update-pokemon.dto';
 import { Model, isValidObjectId } from 'mongoose';
-import { Pokemon } from './entities/pokemon.entity';
+import { Pokemon } from '../domain/entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+import { IPokemonService } from './pokemon.service.interface';
+// import { PokemonRepository } from '../domain/repository/pokemon.repository';
+// import { IPokemonRepository } from './../../../dist/pokemon/domain/repository/pokemon.respository.interface.d';
 
 @Injectable()
-export class PokemonService {
+export class PokemonService implements IPokemonService {
   constructor(
     @InjectModel(Pokemon.name)
-    private readonly pokemonModel: Model<Pokemon>,
+    private readonly pokemonModel: Model<Pokemon>, // @Inject(PokemonRepository)
+    // private readonly pokemonModel: IPokemonRepository,
   ) {}
-
-  async create(createPokemonDto: CreatePokemonDto) {
-    createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
-
-    try {
-      const pokemon = await this.pokemonModel.create(createPokemonDto);
-      return pokemon;
-    } catch (error) {
-      this.handleExceptions(error);
-    }
-  }
 
   findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
@@ -67,6 +61,17 @@ export class PokemonService {
     return pokemon;
   }
 
+  async create(createPokemonDto: CreatePokemonDto) {
+    createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
+
+    try {
+      const pokemon = await this.pokemonModel.create(createPokemonDto);
+      return pokemon;
+    } catch (error) {
+      this.handleExceptions(error);
+    }
+  }
+
   async update(term: string, updatePokemonDto: UpdatePokemonDto) {
     const pokemon = await this.findOne(term);
 
@@ -102,4 +107,24 @@ export class PokemonService {
       `Can't create Pokemon - Check server logs`,
     );
   }
+
+  // findAll(paginationDto: PaginationDto) {
+  //   return this.pokemonModel.findAll(paginationDto);
+  // }
+
+  // create(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
+  //   throw new Error('Method not implemented.');
+  // }
+  // findOne(term: string): Promise<Pokemon> {
+  //   throw new Error('Method not implemented.');
+  // }
+  // update(
+  //   term: string,
+  //   updatePokemonDto: UpdatePokemonDto,
+  // ): Promise<{ name?: string; no?: number }> {
+  //   throw new Error('Method not implemented.');
+  // }
+  // remove(id: string): Promise<void> {
+  //   throw new Error('Method not implemented.');
+  // }
 }
