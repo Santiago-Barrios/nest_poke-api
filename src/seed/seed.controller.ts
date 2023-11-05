@@ -1,6 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
 import { SeedService } from './seed.service';
-import { PokeResponse } from './interfaces/poke-response.interface';
 
 @Controller('seed')
 export class SeedController {
@@ -8,6 +7,7 @@ export class SeedController {
 
   @Get()
   executeSeed() {
+    console.log('a');
     return this.seedService.executeSeed();
   }
 }
