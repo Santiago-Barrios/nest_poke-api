@@ -4,7 +4,7 @@ import {
   CreatePokemonDto,
   UpdatePokemonDto,
 } from 'src/pokemon/infraestructure/dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from 'src/common/domain/dto/pagination.dto';
 import {
   BadRequestException,
   Injectable,
@@ -12,13 +12,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { IPokemonRepository } from './pokemon.respository.interface';
+import { IPokemonRepository } from './pokemon.repository.interface';
 
 @Injectable()
 export class PokemonRepository implements IPokemonRepository {
   constructor(
     @InjectModel(Pokemon.name)
-    private readonly pokemonModel: Model<Pokemon>,
+    private pokemonModel: Model<Pokemon>,
   ) {}
 
   findAll(paginationDto: PaginationDto) {
@@ -63,7 +63,7 @@ export class PokemonRepository implements IPokemonRepository {
     createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
 
     try {
-      const pokemon = await this.create(createPokemonDto);
+      const pokemon = await this.pokemonModel.create(createPokemonDto);
       return pokemon;
     } catch (error) {
       this.handleExceptions(error);

@@ -4,7 +4,7 @@ import {
   CreatePokemonDto,
   UpdatePokemonDto,
 } from 'src/pokemon/infraestructure/dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from 'src/common/domain/dto/pagination.dto';
 
 export interface IPokemonRepository {
   create(createPokemonDto: CreatePokemonDto): Promise<Pokemon>;

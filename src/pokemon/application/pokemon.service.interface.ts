@@ -1,6 +1,6 @@
 import { CreatePokemonDto } from '../infraestructure/dto/create-pokemon.dto';
 import { UpdatePokemonDto } from '../infraestructure/dto/update-pokemon.dto';
-import { PaginationDto } from '../../common/dto/pagination.dto';
+import { PaginationDto } from '../../common/domain/dto/pagination.dto';
 import { Pokemon } from '../domain/entities/pokemon.entity';
 import { Model } from 'mongoose';
 
